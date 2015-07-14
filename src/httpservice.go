@@ -16,39 +16,17 @@
 package main
 
 import (
-	"fmt"
-	"strconv"
-	"encoding/json"
-	"os"
-	"io"
+	"net"
 )
 
-func GetConfig(r io.Reader) (x *Config, err error) {
-	x = new(Config)
-	err = json.NewDecoder(r).Decode(x)
-	return
-}
-
-func main() {
-	conffile, err := os.Open("./config.json")
+func IsHttpServiceOnline(service Service) (b bool, err error) {
+        b = false
+	conn, err := net.Dial(service.Proto, service.Address)
 	if err != nil {
 		panic(err)
 	}
 
-	config, err := GetConfig(conffile)
-	if err != nil {
-		panic(err)
-	}
-
-	for i := range config.Services {
-		service := config.Services[i]
-		service.Address = service.Host + ":" + strconv.Itoa(service.Port)
-		online, err := IsHttpServiceOnline(service)
-		if err != nil {
-			panic(err)
-		}
-		if online {
-			fmt.Println("Tested " + service.Name)
-		}
-	}
+	conn.Close()
+	b = true
+        return
 }

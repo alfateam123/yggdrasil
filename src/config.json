@@ -12,18 +12,21 @@
 			"host": "nerdz.eu",
 			"port": 80,
 			"proto": "tcp",
+			"type": "http",
 			"name": "NERDZ Web Server"
 		},
                 {
                         "host": "google.com",
                         "port": 80,
                         "proto": "tcp",
+			"type": "http",
                         "name": "GOOGLE Web Server"
                 },
                 {
                         "host": "github.com",
                         "port": 80,
                         "proto": "tcp",
+			"type": "http",
                         "name": "GITHUB Web Server"
                 }
 	]
