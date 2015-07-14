@@ -1,0 +1,30 @@
+{
+	"irc":
+	{
+		"nick": "yggdrasil",
+		"host": "irc.nwa.xyz",
+		"chan": "#yggdrasil",
+		"port": 6667
+	},
+	"services":
+	[
+		{
+			"host": "nerdz.eu",
+			"port": 80,
+			"proto": "tcp",
+			"name": "NERDZ Web Server"
+		},
+                {
+                        "host": "google.com",
+                        "port": 80,
+                        "proto": "tcp",
+                        "name": "GOOGLE Web Server"
+                },
+                {
+                        "host": "github.com",
+                        "port": 80,
+                        "proto": "tcp",
+                        "name": "GITHUB Web Server"
+                }
+	]
+}
