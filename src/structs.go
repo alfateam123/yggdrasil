@@ -20,33 +20,34 @@ import (
 )
 
 type Config struct {
-        Services []Service `json:"services"`
-        Irc      IrcConfig `json:"irc"`
+	Services []Service `json:"services"`
+	Irc      IrcConfig `json:"irc"`
 }
 
 type IrcConfig struct {
-        Nick     string    `json:"nick"`
-        Host     string    `json:"host"`
-        Port     int       `json:"port"`
-        Chan     string    `json:"chan"`
+	Nick string `json:"nick"`
+	Host string `json:"host"`
+	Port int    `json:"port"`
+	Chan string `json:"chan"`
 }
 
 type Service struct {
-        Host     string    `json:"host"`
-        Port     int       `json:"port"`
-        Address  string
-        Proto    string    `json:"proto"`
-	Type     string    `json:"type"`
-        Name     string    `json:"name"`
+	Host    string `json:"host"`
+	Port    int    `json:"port"`
+	Address string
+	Proto   string `json:"proto"`
+	Type    string `json:"type"`
+	Name    string `json:"name"`
 }
 
-func NewService(host string, port int, proto string, name string) (service Service) {
-        service = Service{
-                Host:    host,
-                Port:    port,
-                Address: host + ":" + strconv.Itoa(port),
-                Proto:   proto,
-                Name:    name,
-        }
-        return service
+func NewService(host string, port int, proto string, name string, srvctype string) (service Service) {
+	service = Service{
+		Host:    host,
+		Port:    port,
+		Address: host + ":" + strconv.Itoa(port),
+		Proto:   proto,
+		Name:    name,
+		Type:    srvctype,
+	}
+	return service
 }

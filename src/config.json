@@ -1,33 +1,21 @@
 {
-	"irc":
-	{
+	"irc": {
 		"nick": "yggdrasil",
 		"host": "irc.nwa.xyz",
 		"chan": "#yggdrasil",
 		"port": 6667
 	},
-	"services":
-	[
-		{
-			"host": "nerdz.eu",
-			"port": 80,
-			"proto": "tcp",
-			"type": "http",
-			"name": "NERDZ Web Server"
-		},
-                {
-                        "host": "google.com",
-                        "port": 80,
-                        "proto": "tcp",
-			"type": "http",
-                        "name": "GOOGLE Web Server"
-                },
-                {
-                        "host": "github.com",
-                        "port": 80,
-                        "proto": "tcp",
-			"type": "http",
-                        "name": "GITHUB Web Server"
-                }
+	"services": [
+		{"host": "http://www.nerdz.eu",
+		"port": 80,
+		"proto": "tcp",
+		"type": "http",
+		"name": "NERDZ Web Server" },
+
+		{"host": "http://google.evil.com",
+		"port": 80,
+		"proto": "tcp",
+		"type": "http",
+		"name": "GOOGLE Web Server (error test)"}
 	]
 }

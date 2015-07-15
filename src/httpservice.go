@@ -16,17 +16,18 @@
 package main
 
 import (
-	"net"
+	"net/http"
 )
 
-func IsHttpServiceOnline(service Service) (b bool, err error) {
-        b = false
-	conn, err := net.Dial(service.Proto, service.Address)
-	if err != nil {
-		panic(err)
-	}
+func IsHTTPServiceOnline(service Service) (b bool, err error) {
+	b = false
+	resp, err := http.Get(service.Address)
 
-	conn.Close()
-	b = true
-        return
+	if err == nil {
+		defer resp.Body.Close()
+		if resp.StatusCode == 200 {
+			b = true
+		}
+	}
+	return
 }

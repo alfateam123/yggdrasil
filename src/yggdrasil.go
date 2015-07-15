@@ -16,11 +16,11 @@
 package main
 
 import (
-	"fmt"
-	"strconv"
 	"encoding/json"
-	"os"
+	"fmt"
 	"io"
+	"os"
+	"strconv"
 )
 
 func GetConfig(r io.Reader) (x *Config, err error) {
@@ -41,13 +41,21 @@ func main() {
 	}
 
 	for i := range config.Services {
+		var err error
+		var online bool
+
 		service := config.Services[i]
 		service.Address = service.Host + ":" + strconv.Itoa(service.Port)
-		online, err := IsHttpServiceOnline(service)
-		if err != nil {
-			panic(err)
+
+		if service.Type == "http" {
+			online, err = IsHTTPServiceOnline(service)
+		} else {
+			online, err = false, nil
 		}
-		if online {
+
+		if err != nil {
+			fmt.Println("Got an error while testing " + service.Name + ": " + err.Error())
+		} else if online {
 			fmt.Println("Tested " + service.Name)
 		}
 	}
