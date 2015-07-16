@@ -17,10 +17,10 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
-	"strconv"
+	"sync"
+	"time"
 )
 
 func GetConfig(r io.Reader) (x *Config, err error) {
@@ -29,7 +29,18 @@ func GetConfig(r io.Reader) (x *Config, err error) {
 	return
 }
 
+func Timer(interval int, ircReady chan bool, timeout chan bool) {
+	ready := <-ircReady
+	if ready {
+		for {
+			time.Sleep(time.Duration(interval) * time.Second)
+			timeout <- true
+		}
+	}
+}
+
 func main() {
+	var wg sync.WaitGroup
 	conffile, err := os.Open("./config.json")
 	if err != nil {
 		panic(err)
@@ -40,23 +51,16 @@ func main() {
 		panic(err)
 	}
 
-	for i := range config.Services {
-		var err error
-		var online bool
-
-		service := config.Services[i]
-		service.Address = service.Host + ":" + strconv.Itoa(service.Port)
-
-		if service.Type == "http" {
-			online, err = IsHTTPServiceOnline(service)
-		} else {
-			online, err = false, nil
-		}
-
-		if err != nil {
-			fmt.Println("Got an error while testing " + service.Name + ": " + err.Error())
-		} else if online {
-			fmt.Println("Tested " + service.Name)
-		}
+	conn, err := OpenConnection(config.Irc)
+	if err == nil {
+		ircOut := make(chan string)
+		ircReady := make(chan bool, 1)
+		timeout := make(chan bool)
+		wg.Add(3)
+		go RecvMsgs(conn, wg, config.Irc, ircReady)
+		go SendMsg(conn, wg, config.Irc, ircOut)
+		go CheckServices(*config, wg, timeout, ircOut)
+		go Timer(config.Interval, ircReady, timeout)
 	}
+	wg.Wait()
 }

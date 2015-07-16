@@ -1,9 +1,11 @@
 {
+	"interval": 5,
 	"irc": {
 		"nick": "yggdrasil",
-		"host": "irc.nwa.xyz",
-		"chan": "#yggdrasil",
-		"port": 6667
+		"server": "irc.nwa.xyz",
+		"channel": "#yggdrasil",
+		"port": 6667,
+		"realname": "Protector of the Nine Realms."
 	},
 	"services": [
 		{"host": "http://www.nerdz.eu",

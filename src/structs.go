@@ -22,13 +22,15 @@ import (
 type Config struct {
 	Services []Service `json:"services"`
 	Irc      IrcConfig `json:"irc"`
+	Interval int       `json:"interval"`
 }
 
 type IrcConfig struct {
-	Nick string `json:"nick"`
-	Host string `json:"host"`
-	Port int    `json:"port"`
-	Chan string `json:"chan"`
+	Server   string `json:"server"`
+	Port     int    `json:"port"`
+	Nick     string `json:"nick"`
+	RealName string `json:"realname"`
+	Channel  string `json:"channel"`
 }
 
 type Service struct {
