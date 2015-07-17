@@ -24,7 +24,7 @@ import (
 
 func IsHTTPServiceOnline(service Service) (b bool, err error) {
 	b = false
-	resp, err := http.Get(service.Address)
+	resp, err := http.Get(service.Host + ":" + strconv.Itoa(service.Port))
 
 	if err == nil {
 		defer resp.Body.Close()
@@ -45,9 +45,8 @@ func CheckServices(config Config, wg sync.WaitGroup, ircReady chan bool, ircOut 
 				var err error
 
 				service := config.Services[i]
-				service.Address = service.Host + ":" + strconv.Itoa(service.Port)
 
-				if service.Type == "http" {
+				if service.Type == HTTPService {
 					_, err = IsHTTPServiceOnline(service)
 				} else {
 					_, err = false, errors.New("Unknown service type.")

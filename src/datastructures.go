@@ -15,10 +15,6 @@
 
 package main
 
-import (
-	"strconv"
-)
-
 type Config struct {
 	Services []Service `json:"services"`
 	Irc      IrcConfig `json:"irc"`
@@ -34,22 +30,18 @@ type IrcConfig struct {
 }
 
 type Service struct {
-	Host    string `json:"host"`
-	Port    int    `json:"port"`
-	Address string
-	Proto   string `json:"proto"`
-	Type    string `json:"type"`
-	Name    string `json:"name"`
+	Host  string      `json:"host"`
+	Port  int         `json:"port"`
+	Proto string      `json:"proto"`
+	Type  ServiceType `json:"type"`
+	Name  string      `json:"name"`
 }
 
-func NewService(host string, port int, proto string, name string, srvctype string) (service Service) {
-	service = Service{
-		Host:    host,
-		Port:    port,
-		Address: host + ":" + strconv.Itoa(port),
-		Proto:   proto,
-		Name:    name,
-		Type:    srvctype,
-	}
-	return service
-}
+type ServiceType string
+
+const (
+	HTTPService ServiceType = "http"
+	FTPService  ServiceType = "ftp"
+	SSHService  ServiceType = "ssh"
+	SMTPService ServiceType = "smtp"
+)
