@@ -18,19 +18,48 @@ package main
 import (
 	"errors"
 	"net/http"
+	"net/smtp"
 	"strconv"
 	"sync"
 )
 
+func GetServiceAddress(host string, port int) (address string) {
+	address = host + ":" + strconv.Itoa(port)
+	return
+}
+
 func IsHTTPServiceOnline(service Service) (b bool, err error) {
 	b = false
-	resp, err := http.Get(service.Host + ":" + strconv.Itoa(service.Port))
+	resp, err := http.Get(GetServiceAddress(service.Host, service.Port))
 
 	if err == nil {
 		defer resp.Body.Close()
 		if resp.StatusCode == 200 {
 			b = true
 		}
+	}
+	return
+}
+
+func IsFTPServiceOnline(service Service) (b bool, err error) {
+	b = false
+	err = nil
+	return
+}
+
+func IsSSHServiceOnline(service Service) (b bool, err error) {
+	b = false
+	err = nil
+	return
+}
+
+func IsSMTPServiceOnline(service Service) (b bool, err error) {
+	b = false
+	client, err := smtp.Dial(GetServiceAddress(service.Host, service.Port))
+
+	if err == nil {
+		defer client.Close()
+		b = true
 	}
 	return
 }
@@ -43,19 +72,30 @@ func CheckServices(config Config, wg sync.WaitGroup, ircReady chan bool, ircOut 
 			ircOut <- "Initiating full service scan..."
 			for i := range config.Services {
 				var err error
+				var online bool
 
 				service := config.Services[i]
 
 				if service.Type == HTTPService {
-					_, err = IsHTTPServiceOnline(service)
+					online, err = IsHTTPServiceOnline(service)
+				} else if service.Type == FTPService {
+					online, err = IsFTPServiceOnline(service)
+				} else if service.Type == SSHService {
+					online, err = IsSMTPServiceOnline(service)
+				} else if service.Type == SMTPService {
+					online, err = IsSMTPServiceOnline(service)
 				} else {
-					_, err = false, errors.New("Unknown service type.")
+					online, err = false, errors.New("Unknown service type.")
 				}
 
+				if online {
+					// Log response time to sqlite db
+				}
 				if err != nil {
 					ircOut <- "Service " + service.Name + " seems to be down: " + err.Error()
 				}
 			}
+			ircOut <- "Scan done."
 		}
 	}
 }
