@@ -1,0 +1,23 @@
+{
+	"interval": 5,
+	"irc": {
+		"nick": "yggdrasil",
+		"server": "irc.nwa.xyz",
+		"channel": "#yggdrasil",
+		"port": 6667,
+		"realname": "Protector of the Nine Realms."
+	},
+	"services": [
+		{"host": "http://www.nerdz.eu",
+		"port": 80,
+		"proto": "tcp",
+		"type": "http",
+		"name": "NERDZ Web Server" },
+
+		{"host": "http://google.evil.com",
+		"port": 80,
+		"proto": "tcp",
+		"type": "http",
+		"name": "GOOGLE Web Server (error test)"}
+	]
+}
